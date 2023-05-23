@@ -39,7 +39,19 @@ export default function App() {
     // On success, we should set the token to local storage in a 'token' key,
     // put the server success message in its proper state, and redirect
     // to the Articles screen. Don't forget to turn off the spinner!
-
+    setMessage("");
+    console.log(`username:`, username);
+    console.log(`password:`, password);
+    axios.post(loginUrl, { username: username, password: password })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+        console.log(res.data.message);
+        console.log(res.data.token);
+        console.log(res.status);
+      })
+      .catch(err => console.error(err))
+    setSpinnerOn(false);
   }
 
   const getArticles = () => {
@@ -82,7 +94,7 @@ export default function App() {
           <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
         </nav>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          <Route path="/" element={<LoginForm login={ login }/>} />
           <Route path="articles" element={
             <>
               <ArticleForm />
