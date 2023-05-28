@@ -111,56 +111,56 @@ describe('Advanced Applications', () => {
       await screen.findByText('Here are your articles, Foo!', queryOptions, waitForOptions)
     })
   })
-  // describe('Logout', () => {
-  //   test(`[4] Clicking the logout button
-  //       - redirection to the login screen
-  //       - the "token" key is removed from local storage
-  //       - a success message renders on the page
-  //       -  Review how to handle authentication with tokens in a React app (using local storage) and redirect the user.`, async () => {
-  //     await loginFlow()
-  //     // token set sanity check
-  //     expect(token()).toBeTruthy()
-  //     // logout flow
-  //     fireEvent.click(logoutBtn())
-  //     // goodbye message renders
-  //     await screen.findByText('Goodbye!', queryOptions, waitForOptions)
-  //     // login form visible
-  //     await screen.findByPlaceholderText('Enter username', queryOptions, waitForOptions)
-  //     await screen.findByPlaceholderText('Enter password', queryOptions, waitForOptions)
-  //     // token unset
-  //     expect(token()).toBeFalsy()
-  //   })
-  // })
-  // describe('Posting a new article', () => {
-  //   test(`[5] Submit button is disabled on page load, Review how to conditionally disable a button element.`, async () => {
-  //     await loginFlow()
-  //     expect(submitArticleBtn()).toBeDisabled()
-  //   })
-  //   test(`[6] Filling out the article form and submitting
-  //       - resets the form
-  //       - adds a new article to the page
-  //       - a success message renders on the page`, async () => {
-  //     await loginFlow()
-  //     // filling out form
-  //     fireEvent.change(titleInput(), { target: { value: 'Fancy Title' } })
-  //     fireEvent.change(textInput(), { target: { value: 'Fancy text' } })
-  //     fireEvent.change(topicSelect(), { target: { value: 'React' } })
-  //     expect(titleInput()).toHaveValue('Fancy Title')
-  //     expect(textInput()).toHaveValue('Fancy text')
-  //     expect(topicSelect()).toHaveValue('React')
-  //     // submission renders new article
-  //     fireEvent.click(submitArticleBtn())
-  //     await screen.findByText('Fancy Title', queryOptions, waitForOptions)
-  //     screen.getByText('Fancy text', queryOptions)
-  //     expect(screen.getAllByText('Topic: React', queryOptions)).toHaveLength(2)
-  //     // inputs are cleared
-  //     expect(titleInput()).toHaveValue('')
-  //     expect(textInput()).toHaveValue('')
-  //     expect(topicSelect()).toHaveValue('')
-  //     // success message from server
-  //     await screen.findByText('Well done, Foo. Great article!', queryOptions, waitForOptions)
-  //   })
-  // })
+  describe('Logout', () => {
+    test(`[4] Clicking the logout button
+        - redirection to the login screen
+        - the "token" key is removed from local storage
+        - a success message renders on the page
+        -  Review how to handle authentication with tokens in a React app (using local storage) and redirect the user.`, async () => {
+      await loginFlow()
+      // token set sanity check
+      expect(token()).toBeTruthy()
+      // logout flow
+      fireEvent.click(logoutBtn())
+      // goodbye message renders
+      await screen.findByText('Goodbye!', queryOptions, waitForOptions)
+      // login form visible
+      await screen.findByPlaceholderText('Enter username', queryOptions, waitForOptions)
+      await screen.findByPlaceholderText('Enter password', queryOptions, waitForOptions)
+      // token unset
+      expect(token()).toBeFalsy()
+    })
+  })
+  describe('Posting a new article', () => {
+    test(`[5] Submit button is disabled on page load, Review how to conditionally disable a button element.`, async () => {
+      await loginFlow()
+      expect(submitArticleBtn()).toBeDisabled()
+    })
+    test(`[6] Filling out the article form and submitting
+        - resets the form
+        - adds a new article to the page
+        - a success message renders on the page`, async () => {
+      await loginFlow()
+      // filling out form
+      fireEvent.change(titleInput(), { target: { value: 'Fancy Title' } })
+      fireEvent.change(textInput(), { target: { value: 'Fancy text' } })
+      fireEvent.change(topicSelect(), { target: { value: 'React' } })
+      expect(titleInput()).toHaveValue('Fancy Title')
+      expect(textInput()).toHaveValue('Fancy text')
+      expect(topicSelect()).toHaveValue('React')
+      // submission renders new article
+      fireEvent.click(submitArticleBtn())
+      await screen.findByText('Fancy Title', queryOptions, waitForOptions)
+      screen.getByText('Fancy text', queryOptions)
+      expect(screen.getAllByText('Topic: React', queryOptions)).toHaveLength(2)
+      // inputs are cleared
+      expect(titleInput()).toHaveValue('')
+      expect(textInput()).toHaveValue('')
+      expect(topicSelect()).toHaveValue('')
+      // success message from server
+      await screen.findByText('Well done, Foo. Great article!', queryOptions, waitForOptions)
+    })
+  })
   // describe('Editing an existing article', () => {
   //   test('[7] Clicking edit button populates the article information into the form, Review how to manipulate and use state and reset a form using initial values.', async () => {
   //     await loginFlow()

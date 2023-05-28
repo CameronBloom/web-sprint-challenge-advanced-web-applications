@@ -56,6 +56,7 @@ export default function App() {
     let fetchedToken = ""
     setMessage("");
     setSpinnerOn(true);
+
     axios.post(loginUrl, { username: username, password: password })
       .then(res => {
         fetchedToken = res.data["token"];
@@ -64,11 +65,12 @@ export default function App() {
         console.error(err)
       })
       .finally(() => {
-        setSpinnerOn(false);
         localStorage.setItem("token", fetchedToken);
         setMessage(`Here are your articles, ${username}!`)
         redirectToArticles();
       })
+
+    setSpinnerOn(false);
   }
 
   const getArticles = () => {
@@ -77,10 +79,41 @@ export default function App() {
     // and launch an authenticated request to the proper endpoint.
     // On success, we should set the articles in their proper state and
     // put the server success message in its proper state.
-    // If something goes wrong, check the status of the response:
-    // if it's a 401 the token might have gone bad, and we should redirect to login.
-    // Don't forget to turn off the spinner!
-    console.log(`called getArticles...`)
+    // done - If something goes wrong, check the status of the response:
+    // done - if it's a 401 the token might have gone bad, and we should redirect to login.
+    // done - Don't forget to turn off the spinner!
+    const token = localStorage.getItem("token");
+    setMessage("");
+    setSpinnerOn(true);
+
+    axios.get(articlesUrl, {
+      headers: {
+        authorization: token,
+      }
+    })
+      .then(res => {
+        // console.log(res)
+        // console.log(res.status)
+        // console.log(res.data)
+        setArticles(res.data.articles)
+        setMessage(res.data.message)
+      })
+      .catch(err => {
+        // console.error(err)
+        // console.error(err.code)
+        // console.error(err.message)
+        // console.error(err.name)
+        // console.error(err.response.data.message)
+        // console.error(err.response.status)
+        // console.error(err.response.statusText)
+        if (err.response.status === 401) {
+          console.log(`401 error => redirecting to login`)
+          redirectToLogin();
+        }
+      })
+      .finally(() => {})
+
+    setSpinnerOn(false);
   }
 
   const postArticle = article => {
@@ -115,7 +148,12 @@ export default function App() {
           <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
         </nav>
         <Routes>
-          <Route path="/" element={<LoginForm login={ login }/>} />
+          <Route path="/" element={
+            <>
+            <LoginForm login={ login }/>
+            <button disabled={false} onClick={getArticles}>articles test</button>
+            </>
+          } />
           <Route path="/articles" element={
             <Protected token={localStorage.getItem("token")}>
               <ArticleForm  
