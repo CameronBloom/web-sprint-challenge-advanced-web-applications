@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { NavLink, Routes, Route, useNavigate } from 'react-router-dom'
 import Articles from './Articles'
 import LoginForm from './LoginForm'
@@ -21,46 +21,21 @@ export default function App() {
   const [currentArticleId, setCurrentArticleId] = useState()
   const [spinnerOn, setSpinnerOn] = useState(false)
 
-  const [currentArticle, setCurrentArticle] = useState({
-    article_id: '',
-    title: '',
-    text: '',
-    topic: '',
-  })
-
-  // useEffect(() => {
-  //   // CUSTOM USE EFFECT
-  //   if (articles) {
-  //     let foundObject = articles.find(obj => obj.article_id === currentArticleId);
-  //     setCurrentArticle({
-  //         article_id: foundObject.article_id,
-  //         title: foundObject.title,
-  //         text: foundObject.text,
-  //         topic: foundObject.topic,
-  //     })
-  //   } else {
-  //     setCurrentArticle({
-  //       article_id: '',
-  //       title: '',
-  //       text: '',
-  //       topic: '',
-  //     })
-  //   }
-  // }, [currentArticleId])
-
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
+
   const redirectToLogin = () => { 
-    /* ✨ implement (done) */ 
+    /* ✨ implement */ 
     navigate("/");
   }
+
   const redirectToArticles = () => { 
-    /* ✨ implement (done) */ 
+    /* ✨ implement */ 
     navigate("/articles");
   }
 
   const logout = () => {
-    // ✨ implement (done)
+    // ✨ implement
     // If a token is in local storage it should be removed,
     // and a message saying "Goodbye!" should be set in its proper state.
     // In any case, we should redirect the browser back to the login screen,
@@ -74,7 +49,7 @@ export default function App() {
   }
 
   const login = ({ username, password }) => {
-    // ✨ implement (done)
+    // ✨ implement
     // We should flush the message state, turn on the spinner
     // and launch a request to the proper endpoint.
     // On success, we should set the token to local storage in a 'token' key,
@@ -110,7 +85,7 @@ export default function App() {
     // if it's a 401 the token might have gone bad, and we should redirect to login.
     // Don't forget to turn off the spinner!
     const token = localStorage.getItem("token");
-    console.log(localStorage.token)
+
     setMessage("");
     setSpinnerOn(true);
 
@@ -120,20 +95,10 @@ export default function App() {
       }
     })
       .then(res => {
-        // console.log(res)
-        // console.log(res.status)
-        // console.log(res.data)
         setArticles(res.data.articles)
         setMessage(res.data.message)
       })
       .catch(err => {
-        // console.error(err)
-        // console.error(err.code)
-        // console.error(err.message)
-        // console.error(err.name)
-        // console.error(err.response.data.message)
-        // console.error(err.response.status)
-        // console.error(err.response.statusText)
         if (err.response.status === 401) {
           console.log(`401 error => redirecting to login`)
           redirectToLogin();
@@ -181,12 +146,54 @@ export default function App() {
   const updateArticle = ({ article_id, article }) => {
     // ✨ implement
     // You got this!
-    console.log(`called updateArticle...`)
+    setMessage("");
+    setSpinnerOn(true);
+    const token = localStorage.getItem("token");
+    console.log(`token:`,token)
+    const articleUrl = articlesUrl + `/:${article_id}`;
+    console.log(articleUrl)
+    console.log(`article:`,article)
+    
+    axios.put(`${articlesUrl}/${article_id}`, article, {
+      headers: {
+        authorization: token,
+      }
+    })
+      .then(res => {
+        console.log(res)
+        // setArticles(articles => [...articles, res.data.article])
+        setArticles(articles => articles.map(item => item.article_id === article_id ? ({"article_id": article_id, ...article}) : item));
+        setMessage(res.data.message)
+        setCurrentArticleId(null)
+      })
+      .catch(err => {
+        if (err.response.status === 401) {
+          console.log(`401 error => redirecting to login`)
+          redirectToLogin();
+          setSpinnerOn(false);
+        } else { 
+          console.error(err)
+          setSpinnerOn(false);
+        }
+      })
+      .finally(() => {
+        setSpinnerOn(false);
+      })
+      console.log(articles)
   }
+
+
+
+
+
+
+
+
 
   const deleteArticle = article_id => {
     // ✨ implement
     console.log(`called deleteArticle...`)
+    console.log(article_id);
   }
 
   return (
@@ -209,6 +216,8 @@ export default function App() {
                 postArticle={ postArticle }
                 updateArticle={ updateArticle }
                 setCurrentArticleId={ setCurrentArticleId }
+                currentArticle={ currentArticleId }
+                articles={articles}
               />
               <Articles 
                 articles={ articles }

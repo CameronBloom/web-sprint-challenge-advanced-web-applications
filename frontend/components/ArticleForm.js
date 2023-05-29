@@ -6,7 +6,7 @@ const initialFormValues = { title: '', text: '', topic: '' }
 export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues)
   // ✨ where are my props? Destructure them here - done
-  const { postArticle, updateArticle, setCurrentArticleId, currentArticle } = props
+  const { postArticle, updateArticle, setCurrentArticleId, currentArticle, articles } = props
 
   useEffect(() => {
     // ✨ implement - done
@@ -14,8 +14,11 @@ export default function ArticleForm(props) {
     // if it's truthy, we should set its title, text and topic into the corresponding
     // values of the form. If it's not, we should reset the form back to initial values.
     if (currentArticle) {
-      setValues({ title: currentArticle.title, text: currentArticle.text, topic: currentArticle.topic })
+      console.log(`there's a current article...`)
+      let foundArticle = articles.find(obj => obj.article_id === currentArticle);
+      setValues({ title: foundArticle.title, text: foundArticle.text, topic: foundArticle.topic })
     } else {
+      console.log(`there's no current article, use the default values...`)
       setValues(initialFormValues)
     }
   }, [currentArticle])
@@ -30,6 +33,21 @@ export default function ArticleForm(props) {
     // ✨ implement - TODO
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
+    if (currentArticle) {
+      updateArticle({ "article_id": currentArticle, "article": {
+        "title": values.title, 
+        "text": values.text, 
+        "topic": values.topic
+      }})
+      setValues(initialFormValues);
+    } else {
+      postArticle({
+        "title": values.title,
+        "text": values.text,
+        "topic": values.topic
+      });
+      setValues(initialFormValues);
+    }
   }
 
   const isDisabled = () => {
@@ -41,11 +59,6 @@ export default function ArticleForm(props) {
     // console.log(`values`, values.text)
     // console.log(`values`, values.topic)
     return !(values.title.trim().length >= 1 && values.text.trim().length >= 1 && values.topic.trim().length >= 1)
-  }
-
-  const handleSubmit = (article) => {
-    postArticle(article);
-    setValues(initialFormValues)
   }
 
   const handleCancel = () => {
@@ -81,18 +94,11 @@ export default function ArticleForm(props) {
       <div className="button-group">
       {currentArticle ? 
           <>
-            <button disabled={isDisabled()} onClick={updateArticle} id="submitArticle">Submit</button>
+            <button disabled={isDisabled()} id="submitArticle">Submit</button>
             <button onClick={ handleCancel }>Cancel edit</button> 
           </> 
         : 
-          <button disabled={isDisabled()} onClick={
-            () => handleSubmit({
-              "title": values.title,
-              "text": values.text,
-              "topic": values.topic
-            })
-          } 
-            id="submitArticle">Submit</button>
+          <button disabled={isDisabled()} id="submitArticle">Submit</button>
       }
       </div>
     </form>

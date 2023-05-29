@@ -161,15 +161,15 @@ describe('Advanced Applications', () => {
       await screen.findByText('Well done, Foo. Great article!', queryOptions, waitForOptions)
     })
   })
-  // describe('Editing an existing article', () => {
-  //   test('[7] Clicking edit button populates the article information into the form, Review how to manipulate and use state and reset a form using initial values.', async () => {
-  //     await loginFlow()
-  //     // entering edit mode
-  //     fireEvent.click(screen.getAllByText('Edit')[0])
-  //     expect(titleInput()).toHaveValue(st.closuresTitle)
-  //     expect(textInput()).toHaveValue(st.closuresText)
-  //     expect(topicSelect()).toHaveValue(st.closuresTopic)
-  //   })
+  describe('Editing an existing article', () => {
+    test('[7] Clicking edit button populates the article information into the form, Review how to manipulate and use state and reset a form using initial values.', async () => {
+      await loginFlow()
+      // entering edit mode
+      fireEvent.click(screen.getAllByText('Edit')[0])
+      expect(titleInput()).toHaveValue(st.closuresTitle)
+      expect(textInput()).toHaveValue(st.closuresText)
+      expect(topicSelect()).toHaveValue(st.closuresTopic)
+    })
   //   test(`[8] Editing the form values and submitting
   //       - updates the edited article on the page
   //       - resets the form
@@ -212,5 +212,5 @@ describe('Advanced Applications', () => {
   //     // success message arrives eventually
   //     await screen.findByText('Article 1 was deleted, Foo!', queryOptions, waitForOptions)
   //   })
-  // })
+  })
 })
