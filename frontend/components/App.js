@@ -149,10 +149,10 @@ export default function App() {
     setMessage("");
     setSpinnerOn(true);
     const token = localStorage.getItem("token");
-    console.log(`token:`,token)
-    const articleUrl = articlesUrl + `/:${article_id}`;
-    console.log(articleUrl)
-    console.log(`article:`,article)
+    // console.log(`token:`,token)
+    // const articleUrl = articlesUrl + `/:${article_id}`;
+    // console.log(articleUrl)
+    // console.log(`article:`,article)
     
     axios.put(`${articlesUrl}/${article_id}`, article, {
       headers: {
@@ -179,21 +179,41 @@ export default function App() {
       .finally(() => {
         setSpinnerOn(false);
       })
-      console.log(articles)
   }
-
-
-
-
-
-
-
-
 
   const deleteArticle = article_id => {
     // ✨ implement
     console.log(`called deleteArticle...`)
     console.log(article_id);
+
+    setMessage("");
+    setSpinnerOn(true);
+    const token = localStorage.getItem("token");
+    axios.delete(`${articlesUrl}/${article_id}`, {
+      headers: {
+        authorization: token,
+      }
+    })
+    .then(res => {
+      console.log(res)
+      // setArticles(articles => [...articles, res.data.article])
+      setArticles(articles => articles.filter(item => item.article_id !== article_id));
+      setMessage(res.data.message)
+      // setCurrentArticleId(null)
+    })
+    .catch(err => {
+      if (err.response.status === 401) {
+        console.log(`401 error => redirecting to login`)
+        redirectToLogin();
+        setSpinnerOn(false);
+      } else { 
+        console.error(err)
+        setSpinnerOn(false);
+      }
+    })
+    .finally(() => {
+      setSpinnerOn(false);
+    })
   }
 
   return (

@@ -170,47 +170,47 @@ describe('Advanced Applications', () => {
       expect(textInput()).toHaveValue(st.closuresText)
       expect(topicSelect()).toHaveValue(st.closuresTopic)
     })
-  //   test(`[8] Editing the form values and submitting
-  //       - updates the edited article on the page
-  //       - resets the form
-  //       - a success message renders on the page
-  //       - Review how to utilize state to set current values.
-  //       -  Review how to make PUT requests to an external API using Axios and how to manipulate and use state.`, async () => {
-  //     await loginFlow()
-  //     // entering edit mode
-  //     fireEvent.click(screen.getAllByText('Edit')[0])
-  //     // making edits
-  //     fireEvent.change(titleInput(), { target: { value: 'Fancy Title' } })
-  //     fireEvent.change(textInput(), { target: { value: 'Fancy text' } })
-  //     fireEvent.change(topicSelect(), { target: { value: 'React' } })
-  //     // form filled out
-  //     expect(titleInput()).toHaveValue('Fancy Title')
-  //     expect(textInput()).toHaveValue('Fancy text')
-  //     expect(topicSelect()).toHaveValue('React')
-  //     // submitting updates
-  //     fireEvent.click(submitArticleBtn())
-  //     // edits on the page
-  //     await screen.findByText('Fancy Title', queryOptions, waitForOptions)
-  //     screen.getByText('Fancy text', queryOptions)
-  //     expect(screen.getAllByText('Topic: React', queryOptions)).toHaveLength(2)
-  //     // success message
-  //     await screen.findByText('Nice update, Foo!', queryOptions, waitForOptions)
-  //   })
-  // })
-  // describe('Deleting an existing article', () => {
-  //   test(`[9] Clicking delete button on an article
-  //       - removes it from the page
-  //       - a success message renders on the page
-  //       - Review how to make DELETE requests to an external API using Axios.`, async () => {
-  //     await loginFlow()
-  //     // hitting delete
-  //     fireEvent.click(screen.getAllByText('Delete')[0])
-  //     // article eventually disappears from the page
-  //     await waitForElementToBeRemoved(() => screen.queryByText(st.closuresTitle, queryOptions))
-  //     expect(screen.queryByText(st.closuresText, queryOptions)).not.toBeInTheDocument()
-  //     expect(screen.queryByText(`Topic: ${st.closuresTopic}`, queryOptions)).not.toBeInTheDocument()
-  //     // success message arrives eventually
-  //     await screen.findByText('Article 1 was deleted, Foo!', queryOptions, waitForOptions)
-  //   })
+    test(`[8] Editing the form values and submitting
+        - updates the edited article on the page
+        - resets the form
+        - a success message renders on the page
+        - Review how to utilize state to set current values.
+        -  Review how to make PUT requests to an external API using Axios and how to manipulate and use state.`, async () => {
+      await loginFlow()
+      // entering edit mode
+      fireEvent.click(screen.getAllByText('Edit')[0])
+      // making edits
+      fireEvent.change(titleInput(), { target: { value: 'Fancy Title' } })
+      fireEvent.change(textInput(), { target: { value: 'Fancy text' } })
+      fireEvent.change(topicSelect(), { target: { value: 'React' } })
+      // form filled out
+      expect(titleInput()).toHaveValue('Fancy Title')
+      expect(textInput()).toHaveValue('Fancy text')
+      expect(topicSelect()).toHaveValue('React')
+      // submitting updates
+      fireEvent.click(submitArticleBtn())
+      // edits on the page
+      await screen.findByText('Fancy Title', queryOptions, waitForOptions)
+      screen.getByText('Fancy text', queryOptions)
+      expect(screen.getAllByText('Topic: React', queryOptions)).toHaveLength(2)
+      // success message
+      await screen.findByText('Nice update, Foo!', queryOptions, waitForOptions)
+    })
+  })
+  describe('Deleting an existing article', () => {
+    test(`[9] Clicking delete button on an article
+        - removes it from the page
+        - a success message renders on the page
+        - Review how to make DELETE requests to an external API using Axios.`, async () => {
+      await loginFlow()
+      // hitting delete
+      fireEvent.click(screen.getAllByText('Delete')[0])
+      // article eventually disappears from the page
+      await waitForElementToBeRemoved(() => screen.queryByText(st.closuresTitle, queryOptions))
+      expect(screen.queryByText(st.closuresText, queryOptions)).not.toBeInTheDocument()
+      expect(screen.queryByText(`Topic: ${st.closuresTopic}`, queryOptions)).not.toBeInTheDocument()
+      // success message arrives eventually
+      await screen.findByText('Article 1 was deleted, Foo!', queryOptions, waitForOptions)
+    })
   })
 })

@@ -17,7 +17,7 @@ export default function Articles(props) {
   }, [])
 
   const handleDelete = (id) => {
-    console.log(`handleDeleteCalled on item:`, id)
+    deleteArticle(id)
   }
   return (
     // ✨ fix the JSX: replace `Function.prototype` with actual functions
