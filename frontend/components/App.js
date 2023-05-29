@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink, Routes, Route, useNavigate } from 'react-router-dom'
 import Articles from './Articles'
 import LoginForm from './LoginForm'
@@ -20,6 +20,33 @@ export default function App() {
   const [articles, setArticles] = useState([])
   const [currentArticleId, setCurrentArticleId] = useState()
   const [spinnerOn, setSpinnerOn] = useState(false)
+
+  const [currentArticle, setCurrentArticle] = useState({
+    article_id: '',
+    title: '',
+    text: '',
+    topic: '',
+  })
+
+  // useEffect(() => {
+  //   // CUSTOM USE EFFECT
+  //   if (articles) {
+  //     let foundObject = articles.find(obj => obj.article_id === currentArticleId);
+  //     setCurrentArticle({
+  //         article_id: foundObject.article_id,
+  //         title: foundObject.title,
+  //         text: foundObject.text,
+  //         topic: foundObject.topic,
+  //     })
+  //   } else {
+  //     setCurrentArticle({
+  //       article_id: '',
+  //       title: '',
+  //       text: '',
+  //       topic: '',
+  //     })
+  //   }
+  // }, [currentArticleId])
 
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
@@ -68,9 +95,9 @@ export default function App() {
         localStorage.setItem("token", fetchedToken);
         setMessage(`Here are your articles, ${username}!`)
         redirectToArticles();
+        setSpinnerOn(false);
       })
 
-    setSpinnerOn(false);
   }
 
   const getArticles = () => {
@@ -79,10 +106,11 @@ export default function App() {
     // and launch an authenticated request to the proper endpoint.
     // On success, we should set the articles in their proper state and
     // put the server success message in its proper state.
-    // done - If something goes wrong, check the status of the response:
-    // done - if it's a 401 the token might have gone bad, and we should redirect to login.
-    // done - Don't forget to turn off the spinner!
+    // If something goes wrong, check the status of the response:
+    // if it's a 401 the token might have gone bad, and we should redirect to login.
+    // Don't forget to turn off the spinner!
     const token = localStorage.getItem("token");
+    console.log(localStorage.token)
     setMessage("");
     setSpinnerOn(true);
 
@@ -109,11 +137,12 @@ export default function App() {
         if (err.response.status === 401) {
           console.log(`401 error => redirecting to login`)
           redirectToLogin();
+          setSpinnerOn(false);
         }
       })
-      .finally(() => {})
-
-    setSpinnerOn(false);
+      .finally(() => {
+        setSpinnerOn(false);
+      })
   }
 
   const postArticle = article => {
@@ -121,7 +150,32 @@ export default function App() {
     // The flow is very similar to the `getArticles` function.
     // You'll know what to do! Use log statements or breakpoints
     // to inspect the response from the server.
-    console.log(`called postArticle...`)
+    const token = localStorage.getItem("token");
+    setMessage("");
+    setSpinnerOn(true);
+    
+    axios.post(articlesUrl, article, {
+      headers: {
+        authorization: token,
+      }
+    })
+      .then(res => {
+        setArticles(articles => [...articles, res.data.article])
+        setMessage(res.data.message)
+      })
+      .catch(err => {
+        if (err.response.status === 401) {
+          console.log(`401 error => redirecting to login`)
+          redirectToLogin();
+          setSpinnerOn(false);
+        } else { 
+          console.error(err)
+          setSpinnerOn(false);
+        }
+      })
+      .finally(() => {
+        setSpinnerOn(false);
+      })
   }
 
   const updateArticle = ({ article_id, article }) => {
@@ -148,19 +202,13 @@ export default function App() {
           <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
         </nav>
         <Routes>
-          <Route path="/" element={
-            <>
-            <LoginForm login={ login }/>
-            <button disabled={false} onClick={getArticles}>articles test</button>
-            </>
-          } />
+          <Route path="/" element={<LoginForm login={ login } />} />
           <Route path="/articles" element={
             <Protected token={localStorage.getItem("token")}>
               <ArticleForm  
-                getArticles={ getArticles }
                 postArticle={ postArticle }
                 updateArticle={ updateArticle }
-                deleteArticle={ deleteArticle }
+                setCurrentArticleId={ setCurrentArticleId }
               />
               <Articles 
                 articles={ articles }
