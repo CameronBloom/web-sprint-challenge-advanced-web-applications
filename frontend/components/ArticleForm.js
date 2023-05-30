@@ -14,11 +14,11 @@ export default function ArticleForm(props) {
     // if it's truthy, we should set its title, text and topic into the corresponding
     // values of the form. If it's not, we should reset the form back to initial values.
     if (currentArticle) {
-      console.log(`there's a current article...`)
+      // console.log(`there's a current article...`)
       let foundArticle = articles.find(obj => obj.article_id === currentArticle);
       setValues({ title: foundArticle.title, text: foundArticle.text, topic: foundArticle.topic })
     } else {
-      console.log(`there's no current article, use the default values...`)
+      // console.log(`there's no current article, use the default values...`)
       setValues(initialFormValues)
     }
   }, [currentArticle])

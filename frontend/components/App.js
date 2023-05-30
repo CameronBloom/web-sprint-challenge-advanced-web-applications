@@ -64,7 +64,15 @@ export default function App() {
         fetchedToken = res.data["token"];
       })
       .catch(err => {
-        console.error(err)
+        console.log(`login error encountered...`)
+        console.error(err.message)
+        console.error(err.name)
+        console.error(err.code)
+        console.error(err.method)
+        console.error(err.url)
+        console.error(err.response.data)
+        console.error(err.response.status)
+        console.error(err.response.statusText)
       })
       .finally(() => {
         localStorage.setItem("token", fetchedToken);
